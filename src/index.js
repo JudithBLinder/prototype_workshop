@@ -52,12 +52,46 @@ const winston = new Dog('Winston');
 
 // TODO: You'll have to create these two functions. Look in test/index.test.js to inspect the tests!
 class Factory {
-  createClass(className, classObj, classSetters) {
-
+  constructor() {
   }
-
+  createClass(className, classObj, classSetters) {
+    //output: const (newObj) = new ${className}()
+    let objKeys = Object.keys(classObj);
+    //debugger;
+    className = class{
+      constructor() {
+        let argList = arguments;
+        for (let i = 0; i < objKeys.length; i++) {
+          this[objKeys[i]] = classObj[objKeys[i]];
+        }
+        if(classSetters !== undefined) {
+          let setterKeys = Object.keys(classSetters);
+          for (let i = 0; i < setterKeys.length; i++) {
+            this[setterKeys[i]] = classSetters[setterKeys[i]](argList);
+          }
+        }
+        //this.name = classObj.name;
+      }
+    }
+    return className;
+    //this.name = classObj.name;
+    //return this;
+  }
   extendClass(ClassToExtend, className, classObj, classSetters) {
-
+    // const extendClassName = ({ClassToExtend, className} = {} => {
+    //   class className
+    // })
+    //const nameIt = (name, cls) => ({[name] : class extends cls {}})[name];
+    debugger;
+    const classExtender = (className, ClassToExtend) => ({[className] : class extends ClassToExtend {
+      //constructor(){
+      //  super(className, classObj, classSetters)
+      //}
+    }})[className];
+    return classExtender;
+    // class className extends ClassToExtend {
+    //   super(className, classObj, classSetters)
+    // }
   }
 }
 
